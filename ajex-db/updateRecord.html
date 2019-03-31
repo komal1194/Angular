@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>welcome</title>
+</head>
+<body>
+<center>
+<div id="result"></div><br>
+<input type="button" value="Display" onclick=fetchRecord()><br><br>
+<!-- Enter roll no:<input type="text" id="rollno" disabled><br><br>
+ -->
+Enter roll no:<input type="text" id="rollno"><br><br>
+
+Enter name:<input type="text" id="name"><br><br>
+Enter marks:<input type="text" id="marks"><br><br>
+
+<input type="button" value="insert" onclick=insertRecord()>
+<input type="button" value="update" onclick=updateRecord()>
+<input type="button" value="delete" onclick=deleteRecord()>
+
+</center>
+<script type="text/javascript">
+	function fetchRecord()
+	{
+		var xmlhttp=new XMLHttpRequest();
+		xmlhttp.onreadystatechange=function()
+								{
+									if(xmlhttp.readyState==4 && xmlhttp.status==200)
+									{
+										myfun(xmlhttp.responseText);
+									}
+								}
+		xmlhttp.open("GET","fetchRecord.php",true);
+		xmlhttp.send();
+	}
+	function myfun(str)
+	{
+		var arr=JSON.parse(str);
+		var tab="<table border=2>";
+		for(var i=0;i<arr.length;i++)
+		{
+			tab+="<tr onclick=show(event)><td>"+arr[i].rollno+"</td><td>"+arr[i].name+"</td><td>"+arr[i].marks+"</td></tr>";
+		}
+		tab+="</table>";
+		document.getElementById('result').innerHTML=tab;
+	}
+	function show(event)
+	{
+		var data=event.currentTarget.children;
+		document.getElementById('rollno').value=data[0].innerHTML;
+		document.getElementById('name').value=data[1].innerHTML;
+		document.getElementById('marks').value=data[2].innerHTML;
+	}
+	function updateRecord()
+	{
+		var rollno=document.getElementById('rollno').value;
+		var name=document.getElementById('name').value;
+		var marks=document.getElementById('marks').value;
+		var xmlhttp3=new XMLHttpRequest();
+		xmlhttp3.open("GET","updateStud.php?name="+name+"&marks="+marks+"&rollno="+rollno,true);
+		xmlhttp3.send();
+		alert("Record updated");
+	}
+	function deleteRecord()
+	{
+		var rollno=document.getElementById('rollno').value;
+		var name=document.getElementById('name').value;
+		var marks=document.getElementById('marks').value;
+		var xmlhttp4=new XMLHttpRequest();
+		xmlhttp4.open("GET","delete.php?name="+name+"&marks="+marks+"&rollno="+rollno,true);
+		xmlhttp4.send();
+		alert("Record deleted");
+	}
+	function insertRecord(){
+		var rollno=document.getElementById('rollno').value;
+		var name=document.getElementById('name').value;
+		var marks=document.getElementById('marks').value;
+		var xmlhttp5=new XMLHttpRequest();
+		xmlhttp5.open("GET","insert.php?name="+name+"&marks="+marks+"&rollno="+rollno,true);
+		xmlhttp5.send();
+		alert("Record inserted");
+	}
+</script>
+</body>
+</html>
